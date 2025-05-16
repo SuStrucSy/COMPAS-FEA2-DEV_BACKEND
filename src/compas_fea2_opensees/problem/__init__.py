@@ -46,7 +46,7 @@ from .outputs import (
     OpenseesReactionFieldOutput,
     OpenseesHistoryOutput,
     OpenseesStress2DFieldOutput,
-    OpenseesSectionForcesFieldOutput,
+    # OpenseesSectionForcesFieldOutput,
 )
 
 __all__ = [

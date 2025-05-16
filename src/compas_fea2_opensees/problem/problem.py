@@ -8,7 +8,7 @@ import sqlite3
 from compas_fea2.problem import Problem
 from compas_fea2.utilities._utils import launch_process
 from compas_fea2.utilities._utils import timer
-from compas_fea2.utilities._utils import with_spinner
+# from compas_fea2.utilities._utils import with_spinner
 
 import compas_fea2_opensees
 
@@ -26,7 +26,7 @@ class OpenseesProblem(Problem):
     # =========================================================================
 
     # @timer(message="Analysis completed in")
-    @with_spinner("Analysis in progress")
+    # @with_spinner("Analysis in progress")
     def analyse(self, path, exe=None, erase_data=False, verbose=False, *args, **kwargs):
         """Runs the analysis through the OpenSees solver.
 

@@ -167,7 +167,7 @@ from compas_fea2.problem.outputs import (
     VelocityFieldOutput,
     ReactionFieldOutput,
     Stress2DFieldOutput,
-    SectionForcesFieldOutput,
+    # SectionForcesFieldOutput,
     HistoryOutput,
 )
 
@@ -324,7 +324,7 @@ try:
         OpenseesVelocityFieldOutput,
         OpenseesReactionFieldOutput,
         OpenseesStress2DFieldOutput,
-        OpenseesSectionForcesFieldOutput,
+        # OpenseesSectionForcesFieldOutput,
         OpenseesHistoryOutput,
     )
 
@@ -436,7 +436,7 @@ try:
         backend[VelocityFieldOutput] = OpenseesVelocityFieldOutput
         backend[ReactionFieldOutput] = OpenseesReactionFieldOutput
         backend[Stress2DFieldOutput] = OpenseesStress2DFieldOutput
-        backend[SectionForcesFieldOutput] = OpenseesSectionForcesFieldOutput
+        # backend[SectionForcesFieldOutput] = OpenseesSectionForcesFieldOutput
 
         backend[HistoryOutput] = OpenseesHistoryOutput
 
