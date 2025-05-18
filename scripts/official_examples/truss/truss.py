@@ -100,7 +100,7 @@ step.add_output(AccelerationFieldOutput())
 # 9. Run the Analysis (OpenSees example)
 # =============================================================================
 model.add_problem(prb)
-prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
+prb.analyse(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
 
 # =============================================================================
 # 10. Post-processing & Outputs

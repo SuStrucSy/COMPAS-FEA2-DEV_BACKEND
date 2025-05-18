@@ -45,7 +45,7 @@ class OpenseesProblem(Problem):
         -------
         None
         """
-        self._check_analysis_path(path, erase_data=erase_data)
+        self._check_analysis_path(path) #originally had erase_data=erase_data here as a parameter
         self.write_input_file()
         filepath = os.path.join(self.path, self.name + ".tcl")
 
