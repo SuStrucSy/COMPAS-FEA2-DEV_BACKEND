@@ -101,7 +101,7 @@ step.add_output(AccelerationFieldOutput())
 # =============================================================================
 model.add_problem(prb)
 model.show(show_bcs=0.01)
-prb.analyse(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
+prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
 
 # =============================================================================
 # 10. Post-processing & Outputs

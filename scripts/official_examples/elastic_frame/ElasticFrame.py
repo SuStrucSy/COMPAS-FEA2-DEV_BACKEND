@@ -106,7 +106,7 @@ for eid, n1, n2, section in columns_info + beams_info:
 prb = mdl.add_problem(Problem(name="ModalAnalysis"))
 stp = prb.add_step(ModalAnalysis(modes=5))
 
-prb.analyse(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
+prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
 
 prb.show_mode_shape(step=stp, mode=1, scale_results=100)
 

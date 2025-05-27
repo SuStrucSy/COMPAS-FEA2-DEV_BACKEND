@@ -124,6 +124,7 @@ def process_modal_shapes(connection, step):
         eigenvectors[i] = [eigenvector[0], step.name, node.part.name, node.input_key] + eigenvector[2:]
 
     # Create table for modal shapes
+    components = ',\n'.join([f"{c} REAL" for c in ['x', 'y', 'z', 'xx', 'yy', 'zz']])
     cursor.execute(
         f"""
     CREATE TABLE IF NOT EXISTS eigenvectors (
@@ -132,10 +133,12 @@ def process_modal_shapes(connection, step):
         step TEXT,
         part TEXT,
         key INTEGER,
-        {",\n".join([f"{c} REAL" for c in ['x', 'y', 'z', 'xx', 'yy', 'zz']])}
+        {components}
         )
     """
     )
+    # {",\n".join([f"{c} REAL" for c in ['x', 'y', 'z', 'xx', 'yy', 'zz']])}
+
     # Insert modal shape data into the database
     for eigenvector in eigenvectors:
         cursor.execute(
