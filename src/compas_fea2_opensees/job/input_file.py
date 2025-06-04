@@ -24,12 +24,11 @@ class OpenseesInputFile(InputFile):
     data : str
         Final input file text data that will be written in the .tcl file.
     """
-    
+
     def __init__(self, problem, **kwargs):
-        super(OpenseesInputFile, self).__init__(**kwargs)
+        super(OpenseesInputFile, self).__init__(problem=problem, **kwargs)
         self._extension = "tcl"
-        self._problem = problem
-    
+
     def jobdata(self):
         """Generate the content of the input fileself from the Problem object.
 
