@@ -1,4 +1,5 @@
-from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, GenericBeamSection
+from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, BeamSection, GenericBeamSection
+from compas_fea2.model.shapes import Circle
 from compas_fea2.problem import Problem, ModalAnalysis
 from compas_fea2_opensees import TEMP
 import os
@@ -30,15 +31,18 @@ prt = mdl.add_part(Part(name="ElasticFrame-1"))
 prt.ndm = 2
 prt.ndf = 3
 
+#Define shape of beam sections
+face = Circle(radius=0.05)
+
 # Define material properties (Steel)
 steel = ElasticIsotropic(name="Steel", E=29000.0, v=0.3, density=0.0)
 
 # Define cross-sectional properties
-section_col_small = GenericBeamSection(name="W14X257", A=75.6, Ixx=3400.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel)
-section_col_large = GenericBeamSection(name="W14X311", A=91.4, Ixx=4330.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel)
-section_beam1 = GenericBeamSection(name="W33X118", A=34.7, Ixx=5900.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel)
-section_beam2 = GenericBeamSection(name="W30X116", A=34.2, Ixx=4930.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel)
-section_beam3 = GenericBeamSection(name="W24X68", A=20.1, Ixx=1830.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel)
+section_col_small = BeamSection(name="W14X257", A=75.6, Ixx=3400.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel, shape=face)
+section_col_large = BeamSection(name="W14X311", A=91.4, Ixx=4330.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel, shape=face)
+section_beam1 = BeamSection(name="W33X118", A=34.7, Ixx=5900.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel, shape=face)
+section_beam2 = BeamSection(name="W30X116", A=34.2, Ixx=4930.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel, shape=face)
+section_beam3 = BeamSection(name="W24X68", A=20.1, Ixx=1830.0, Iyy=0, Ixy=0, Avx=0, Avy=0, J=0, g0=0, gw=0, material=steel, shape=face)
 
 # Create nodes
 nodes_data = {
@@ -61,11 +65,15 @@ nodes_data = {
 }
 
 for nid, data in nodes_data.items():
-    prt.add_node(Node(name=nid, xyz=data[0], mass=data[1]))
+    # print(nid)
+    x = prt.add_node(Node(name=nid, xyz=data[0], mass=data[1]))
+    # print(x.xyz)
 
 # Apply boundary conditions (fixed supports at base nodes)
 for nid in [1, 2, 3, 4]:
-    n = prt.find_node_by_key(nid - 1)
+    rid = nodes_data[nid][0]
+    n = prt.find_closest_nodes_to_point(rid, single=True)
+    # print(n.xyz)
     mdl.add_pin_bc(n)
 
 # Define elements
@@ -97,8 +105,11 @@ beams_info = [
 ]
 
 for eid, n1, n2, section in columns_info + beams_info:
-    n1 = prt.find_node_by_key(n1 - 1)
-    n2 = prt.find_node_by_key(n2 - 1)
+    nid1 = nodes_data[n1][0]
+    n1 = prt.find_closest_nodes_to_point(nid1, single = True)
+    nid2 = nodes_data[n2][0]
+    n2 = prt.find_closest_nodes_to_point(nid2, single = True)
+    # print(eid,n1,n2)
     prt.add_element(BeamElement(nodes=[n1, n2], section=section, frame=[0, 0, 1]))
 
 # mdl.show(show_bcs=0.03)
@@ -108,7 +119,7 @@ stp = prb.add_step(ModalAnalysis(modes=5))
 
 prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
 
-prb.show_mode_shape(step=stp, mode=1, scale_results=100)
+stp.show_mode_shape(step=stp, mode=1, scale_results=100, show_bcs=0.03)
 
 T1 = 1.0255648890522602
 T2 = 0.349763251359163

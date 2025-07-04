@@ -30,13 +30,19 @@ class OpenseesLinkElement(LinkElement):
 
     def __init__(self, *, nodes, **kwargs):
         super(OpenseesLinkElement, self).__init__(nodes=nodes, **kwargs)
+        #creates list for all freedoms and materials allowing more complex linking, currently no check to equate freedoms and materials
+        _freedoms = kwargs.get("freedoms") if "freedoms" in kwargs else [1, 2, 3, 4, 5, 6]
+        self.freedoms = " ".join(str(f) for f in _freedoms)
+
+        _materials = kwargs.get("materials") if "materials" in kwargs else [self.section.material.key]*6
+        self.materials = " ".join(str(m) for m in _materials)
 
     def jobdata(self):
         return "".join(
             (
                 f"element twoNodeLink {self.key} {self.nodes[0].key} {self.nodes[-1].key} "
-                f"-mat {self.section.material.key} {self.section.material.key} {self.section.material.key} "
-                f"-dir 1 2 3 4 5 6"
+                f"-mat {self.materials}"
+                f"-dir {self.freedoms}"
             )
         )
 
@@ -63,7 +69,7 @@ class OpenseesBeamElement(BeamElement):
         return "\n".join(
             [
                 # f"geomTransf Linear {self.key}",
-                "geomTransf Corotational {} {}".format(self.key, " ".join([str(i) for i in self.frame.zaxis])),
+                f"geomTransf Corotational {self.key}",
                 self._job_data(),
             ]
         )
@@ -96,8 +102,26 @@ class OpenseesBeamElement(BeamElement):
                 self.section.Iyy,
                 self.key,
             )
+        
+    def _beamWithHinges(self):
+        """Construct a beamWithHinges element object.
+
+        For more information about this element in OpenSees check
+        `here <https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/beamWithHinges.html>`_
+
+        NOTE: needs further testing - M.S
+        """
+        return "element beamWithHinges {} {} {} {} {} {}".format(
+            self.key,
+            " ".join(str(node.key) for node in self.nodes),
+            self.section.A,
+            self.section.Ixx,
+            self.section.Iyy,
+            self.key,
+        )
 
     def _inelasticBeamColum(self):
+        # TODO: implement this method
         raise NotImplementedError("Currently under development")
         return (
             "element  {} {} {} $numIntgrPts $endSecTag1 $intSecTag $endSecTag2 $lambda1 $lambda2 $lc $transfTag <-integration integrType> <-iter $maxIter $minTol $maxTol>".format(

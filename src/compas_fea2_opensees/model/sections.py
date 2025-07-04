@@ -71,6 +71,7 @@ class OpenseesBeamSection(BeamSection):
 
     def __init__(self, *, A, Ixx, Iyy, Ixy, Avx, Avy, J, g0, gw, material, **kwargs):
         super().__init__(A=A, Ixx=Ixx, Iyy=Iyy, Ixy=Ixy, Avx=Avx, Avy=Avy, J=J, g0=g0, gw=gw, material=material, **kwargs)
+        self._material = material
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -89,6 +90,7 @@ class OpenseesGenericBeamSection(GenericBeamSection):
 
     def __init__(self, *, A, Ixx, Iyy, Ixy, Avx, Avy, J, g0, gw, material, **kwargs):
         super().__init__(A=A, Ixx=Ixx, Iyy=Iyy, Ixy=Ixy, Avx=Avx, Avy=Avy, J=J, g0=g0, gw=gw, material=material, **kwargs)
+        self._material = material
 
     def jobdata(self):
         return beam_jobdata(self)

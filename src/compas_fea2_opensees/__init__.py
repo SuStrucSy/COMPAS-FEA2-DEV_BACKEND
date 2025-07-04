@@ -62,6 +62,7 @@ from compas_fea2.model.sections import (
     SpringSection,
     ConnectorSection,
     AngleSection,
+    GenericBeamSection,
     BeamSection,
     BoxSection,
     CircularSection,
@@ -237,6 +238,7 @@ try:
         # OpenseesConnectorSection,
         OpenseesAngleSection,
         OpenseesBeamSection,
+        OpenseesGenericBeamSection,
         OpenseesBoxSection,
         OpenseesCircularSection,
         OpenseesHexSection,
@@ -401,6 +403,7 @@ try:
         backend[SpringSection] = OpenseesSpringSection
         # backend[ConnectorSection] = OpenseesConnectorSection
         backend[AngleSection] = OpenseesAngleSection
+        backend[GenericBeamSection] = OpenseesBeamSection  
         backend[BeamSection] = OpenseesBeamSection
         backend[BoxSection] = OpenseesBoxSection
         backend[CircularSection] = OpenseesCircularSection
@@ -432,6 +435,7 @@ try:
         backend[FacesGroup] = OpenseesFacesGroup
 
         backend[TieConstraint] = OpenseesTieConstraint
+        # backend[FixConstraint] = OpenseesFixedConstraint
         # backend[TieMPC] = OpenseesTieMPC
         # backend[BeamMPC] = OpenseesBeamMPC
 
