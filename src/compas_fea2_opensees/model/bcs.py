@@ -13,6 +13,7 @@ from compas_fea2.model import RollerBCXZ
 from compas_fea2.model import RollerBCY
 from compas_fea2.model import RollerBCYZ
 from compas_fea2.model import RollerBCZ
+from compas_fea2.model import _SpecificFix
 
 dofs = ["x", "y", "z", "xx", "yy", "zz"]
 
@@ -199,3 +200,16 @@ class OpenseesRollerBCXZ(RollerBCXZ):
 
     def jobdata(self, nodes):
         return _jobdata(self, nodes)
+    
+class OpenSees_SpecificFix(_SpecificFix):
+    '''
+    Primarily created for fixing specific rotation DOFs for debugging purposes
+    '''
+    __doc__ += _SpecificFix.__doc__
+    def __init__(self, **kwargs):
+        super(OpenSees_SpecificFix, self).__init__(**kwargs)
+    
+    def jobdata(self, nodes):
+        return _jobdata(self, nodes)
+
+

@@ -17,6 +17,10 @@ from compas_fea2.model import StrutSection
 from compas_fea2.model import TieSection
 from compas_fea2.model import TrapezoidalSection
 from compas_fea2.model import TrussSection
+from compas_fea2.model.shapes import Circle
+from compas_fea2.model.shapes import IShape
+from compas_fea2.model.shapes import LShape
+from compas_fea2.model.shapes import Rectangle
 
 # NOTE in opensees the sectional properties are assigned directly to the element UNLESS it is a nonliner thing...
 # in that case there is a tag for the section....aaaaarrrrhhhh
@@ -69,8 +73,9 @@ class OpenseesBeamSection(BeamSection):
 
     """
 
-    def __init__(self, *, A, Ixx, Iyy, Ixy, Avx, Avy, J, g0, gw, material, **kwargs):
-        super().__init__(A=A, Ixx=Ixx, Iyy=Iyy, Ixy=Ixy, Avx=Avx, Avy=Avy, J=J, g0=g0, gw=gw, material=material, **kwargs)
+    def __init__(self, *, A, Ixx, Iyy, Ixy, Avx, Avy, J, g0, gw, material, shape, **kwargs):
+        super().__init__(A=A, Ixx=Ixx, Iyy=Iyy, Ixy=Ixy, Avx=Avx, Avy=Avy, J=J, g0=g0, gw=gw, material=material, shape=shape, **kwargs)
+        self.A = A
         self._material = material
 
     def jobdata(self):
@@ -91,6 +96,7 @@ class OpenseesGenericBeamSection(GenericBeamSection):
     def __init__(self, *, A, Ixx, Iyy, Ixy, Avx, Avy, J, g0, gw, material, **kwargs):
         super().__init__(A=A, Ixx=Ixx, Iyy=Iyy, Ixy=Ixy, Avx=Avx, Avy=Avy, J=J, g0=g0, gw=gw, material=material, **kwargs)
         self._material = material
+        self.A = A
 
     def jobdata(self):
         return beam_jobdata(self)

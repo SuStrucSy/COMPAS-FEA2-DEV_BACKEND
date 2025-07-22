@@ -32,7 +32,7 @@ prt.ndm = 2
 prt.ndf = 3
 
 #Define shape of beam sections
-face = Circle(radius=0.05)
+face = Circle(radius=5)
 
 # Define material properties (Steel)
 steel = ElasticIsotropic(name="Steel", E=29000.0, v=0.3, density=0.0)
@@ -65,15 +65,12 @@ nodes_data = {
 }
 
 for nid, data in nodes_data.items():
-    # print(nid)
     x = prt.add_node(Node(name=nid, xyz=data[0], mass=data[1]))
-    # print(x.xyz)
 
 # Apply boundary conditions (fixed supports at base nodes)
 for nid in [1, 2, 3, 4]:
     rid = nodes_data[nid][0]
     n = prt.find_closest_nodes_to_point(rid, single=True)
-    # print(n.xyz)
     mdl.add_pin_bc(n)
 
 # Define elements
@@ -109,17 +106,16 @@ for eid, n1, n2, section in columns_info + beams_info:
     n1 = prt.find_closest_nodes_to_point(nid1, single = True)
     nid2 = nodes_data[n2][0]
     n2 = prt.find_closest_nodes_to_point(nid2, single = True)
-    # print(eid,n1,n2)
     prt.add_element(BeamElement(nodes=[n1, n2], section=section, frame=[0, 0, 1]))
 
-# mdl.show(show_bcs=0.03)
+mdl.show(show_bcs=0.03)
 
 prb = mdl.add_problem(Problem(name="ModalAnalysis"))
 stp = prb.add_step(ModalAnalysis(modes=5))
 
 prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
 
-stp.show_mode_shape(step=stp, mode=1, scale_results=100, show_bcs=0.03)
+#stp.show_mode_shape(step=stp, mode=1, scale_results=100, show_bcs=0.03)
 
 T1 = 1.0255648890522602
 T2 = 0.349763251359163

@@ -8,6 +8,7 @@ from compas_fea2.model import ShellElement
 from compas_fea2.model import TetrahedronElement
 from compas_fea2.model import TrussElement
 from compas_fea2.model import _Element3D
+from compas_fea2.model import SpringElement
 
 
 # ==============================================================================
@@ -21,7 +22,18 @@ class OpenseesMassElement(MassElement):
     def __init__(self, *, node, section, **kwargs):
         super(OpenseesMassElement, self).__init__(nodes=[node], section=section, **kwargs)
         raise NotImplementedError
+    
+class OpenseesSpringElement(SpringElement):
+    """OpenSees implementation of :class:`compas_fea2.model.SpringElement`.\n"""
 
+    __doc__ += SpringElement.__doc__
+
+    def __init__(self, *, nodes, section, **kwargs):
+        super(OpenseesSpringElement, self).__init__(nodes=[nodes], section=section, **kwargs)
+        
+    def jobdata(self):
+        """Return the OpenSees command for spring element."""
+        return f"element zeroLength {self.key} {self.nodes[0].key} {self.nodes[1].key} -mat {self.section.material.key} {self.section.material.key} -dir 1" #NOTE: adds axial stiffness
 
 class OpenseesLinkElement(LinkElement):
     """Check the documentation \n"""
@@ -69,7 +81,7 @@ class OpenseesBeamElement(BeamElement):
         return "\n".join(
             [
                 # f"geomTransf Linear {self.key}",
-                f"geomTransf Corotational {self.key}",
+                "geomTransf Corotational {} {}".format(self.key, " ".join([str(i) for i in self.frame.zaxis])),
                 self._job_data(),
             ]
         )

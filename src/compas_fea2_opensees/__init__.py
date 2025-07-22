@@ -48,6 +48,7 @@ from compas_fea2.model import Node
 # Elements
 from compas_fea2.model.elements import (
     MassElement,
+    SpringElement,
     LinkElement,
     BeamElement,
     TrussElement,
@@ -143,6 +144,7 @@ from compas_fea2.model.bcs import (
     RollerBCY,
     RollerBCYZ,
     RollerBCZ,
+    _SpecificFix
 )
 
 # Initial Conditions
@@ -223,6 +225,7 @@ try:
     # Opensees Elements
     from .model.elements import (
         OpenseesMassElement,
+        OpenseesSpringElement,
         OpenseesLinkElement,
         OpenseesBeamElement,
         OpenseesTrussElement,
@@ -318,6 +321,7 @@ try:
         OpenseesRollerBCY,
         OpenseesRollerBCYZ,
         OpenseesRollerBCZ,
+        OpenSees_SpecificFix,
     )
 
     # # Initial Conditions
@@ -392,6 +396,7 @@ try:
         backend[Node] = OpenseesNode
 
         backend[MassElement] = OpenseesMassElement
+        backend[SpringElement] = OpenseesSpringElement
         backend[LinkElement] = OpenseesLinkElement
         backend[BeamElement] = OpenseesBeamElement
         backend[TrussElement] = OpenseesTrussElement
@@ -463,6 +468,7 @@ try:
         backend[RollerBCY] = OpenseesRollerBCY
         backend[RollerBCYZ] = OpenseesRollerBCYZ
         backend[RollerBCZ] = OpenseesRollerBCZ
+        backend[_SpecificFix] = OpenSees_SpecificFix
 
         # backend[InitialStressField] = OpenseesInitialStressField
         # backend[InitialTemperatureField] = OpenseesInitialTemperatureField
