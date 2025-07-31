@@ -8,6 +8,11 @@ from compas_fea2.problem import LoadCombination
 from compas_fea2.results import DisplacementFieldResults
 from compas_fea2_opensees import TEMP
 
+'''
+Author(s): Andrew Liew (github.com/andrewliew), Moosa Saboor (https://github.com/Moosa-Saboor)
+Originally written/conceptualized for compas_fea by Andrew Liew, re-written completely for compas_fea2 by Moosa Saboor
+'''
+
 compas_fea2.set_backend("compas_fea2_opensees")
 
 # ==============================================================================

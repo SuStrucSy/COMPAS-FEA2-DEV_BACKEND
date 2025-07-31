@@ -8,7 +8,6 @@ import os
 # Set the backend
 compas_fea2.set_backend("compas_fea2_opensees")
 
-
 mdl = Model(name="TrussModel")
 prt = mdl.add_part(Part(name="Truss-1"))
 prt.ndm = 3

@@ -6,6 +6,11 @@ from compas_fea2_opensees import TEMP
 import compas_fea2
 import os
 
+'''
+Author(s): Andrew Liew (github.com/andrewliew), Moosa Saboor (https://github.com/Moosa-Saboor)
+Originally written/conceptualized for compas_fea by Andrew Liew, re-written completely for compas_fea2 by Moosa Saboor
+'''
+
 compas_fea2.set_backend("compas_fea2_opensees")
 mdl = Model(name="Beam_Frame")
 prt = mdl.add_part(Part(name="Beam_Frame_analysis"))

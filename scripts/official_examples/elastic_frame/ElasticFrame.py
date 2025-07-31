@@ -108,14 +108,14 @@ for eid, n1, n2, section in columns_info + beams_info:
     n2 = prt.find_closest_nodes_to_point(nid2, single = True)
     prt.add_element(BeamElement(nodes=[n1, n2], section=section, frame=[0, 0, 1]))
 
-mdl.show(show_bcs=0.03)
+# mdl.show(show_bcs=0.03)
 
 prb = mdl.add_problem(Problem(name="ModalAnalysis"))
 stp = prb.add_step(ModalAnalysis(modes=5))
 
 prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), verbose=True)
 
-#stp.show_mode_shape(step=stp, mode=1, scale_results=100, show_bcs=0.03)
+stp.show_mode_shape(step=stp, mode=1, scale_results=100, show_bcs=0.03)
 
 T1 = 1.0255648890522602
 T2 = 0.349763251359163
