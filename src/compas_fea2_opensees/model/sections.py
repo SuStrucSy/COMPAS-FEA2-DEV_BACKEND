@@ -17,10 +17,7 @@ from compas_fea2.model import StrutSection
 from compas_fea2.model import TieSection
 from compas_fea2.model import TrapezoidalSection
 from compas_fea2.model import TrussSection
-from compas_fea2.model.shapes import Circle
-from compas_fea2.model.shapes import IShape
-from compas_fea2.model.shapes import LShape
-from compas_fea2.model.shapes import Rectangle
+from compas_fea2.model.shapes import Circle, IShape, Rectangle, Hexagon, LShape
 
 # NOTE in opensees the sectional properties are assigned directly to the element UNLESS it is a nonliner thing...
 # in that case there is a tag for the section....aaaaarrrrhhhh
@@ -75,8 +72,6 @@ class OpenseesBeamSection(BeamSection):
 
     def __init__(self, *, A, Ixx, Iyy, Ixy, Avx, Avy, J, g0, gw, material, shape, **kwargs):
         super().__init__(A=A, Ixx=Ixx, Iyy=Iyy, Ixy=Ixy, Avx=Avx, Avy=Avy, J=J, g0=g0, gw=gw, material=material, shape=shape, **kwargs)
-        self.A = A
-        self._material = material
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -109,6 +104,9 @@ class OpenseesAngleSection(AngleSection):
 
     def __init__(self, w, h, t, material, **kwargs):
         super(OpenseesAngleSection, self).__init__(w, h, t, material, **kwargs)
+        self.shape = LShape
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
+
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -121,6 +119,8 @@ class OpenseesBoxSection(BoxSection):
 
     def __init__(self, w, h, t, material, **kwargs):
         super(OpenseesBoxSection, self).__init__(self, w, h, t, material, **kwargs)
+        self.shape = Rectangle(w=self.w, h=self.h)
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -133,6 +133,9 @@ class OpenseesCircularSection(CircularSection):
 
     def __init__(self, r, material, **kwargs):
         super(OpenseesCircularSection, self).__init__(r, material, **kwargs)
+        self.r = r
+        self.shape = Circle(radius=self.r)
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -145,6 +148,10 @@ class OpenseesHexSection(HexSection):
 
     def __init__(self, r, t, material, **kwargs):
         super(OpenseesHexSection, self).__init__(r, t, material, **kwargs)
+        self.r = r
+        self.t = t
+        self.shape = Hexagon(side_length=self.r)
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -157,6 +164,13 @@ class OpenseesISection(ISection):
 
     def __init__(self, w, h, tw, tbf, ttf, material, **kwargs):
         super(OpenseesISection, self).__init__(w, h, tw, tbf, ttf, material, **kwargs)
+        self.w = w
+        self.h = h
+        self.tw = tw    
+        self.tbf = tbf
+        self.ttf = ttf
+        self.shape = IShape(w=self.w, h=self.h, tw=self.tw, tbf=self.tbf, ttf=self.ttf)
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -169,6 +183,8 @@ class OpenseesPipeSection(PipeSection):
 
     def __init__(self, r, t, material, **kwarg):
         super(OpenseesPipeSection, self).__init__(r, t, material, **kwarg)
+        self.shape = Circle(radius=self.r)
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
 
     def jobdata(self):
         return beam_jobdata(self)
@@ -180,7 +196,12 @@ class OpenseesRectangularSection(RectangularSection):
     __doc__ += RectangularSection.__doc__
 
     def __init__(self, w, h, material, **kwargs):
-        super(OpenseesRectangularSection, self).__init__(w=w, h=h, material=material, **kwargs)
+        super(OpenseesRectangularSection, self).__init__(w, h, material, **kwargs)
+        self.w = w
+        self.h = h
+        self.shape = Rectangle(w=self.w, h=self.h)
+        OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
+
 
     def jobdata(self):
         return beam_jobdata(self)

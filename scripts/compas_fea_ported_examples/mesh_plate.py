@@ -165,4 +165,4 @@ stp.add_output(DisplacementFieldResults)
 # Analyze and extract results to SQLite database
 prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), Verbose=True)
 # Show deformed shape
-stp.show_deformed(scale_results=1, show_original=0.2, show_bcs=0.0003, show_loads=0.05)
+stp.show_deformed(scale_results=1, show_original=0.2, show_bcs=0.00003, show_loads=0.05)

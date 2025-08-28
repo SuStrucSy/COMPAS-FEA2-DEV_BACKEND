@@ -1,6 +1,6 @@
 from compas_fea2.model import Model, Part, Node, TrussElement, ElasticIsotropic, TrussSection
 from compas_fea2.problem import Problem, StaticStep, LoadCombination
-from compas_fea2.results import DisplacementFieldResults, ReactionFieldResults, StressFieldResults
+from compas_fea2.results import DisplacementFieldResults
 from compas_fea2_opensees import TEMP
 import compas_fea2
 import os
@@ -17,12 +17,10 @@ prt = mdl.add_part(Part(name="Truss-3"))
 prt.ndm = 3
 prt.ndf = 3
 
-
 # Materials
 steel = ElasticIsotropic(name="Steel", E=200000000000, v=0.3, density=7850)
 
 # Sections
-
 mainTruss = TrussSection(name='sec_main', A=0.0001, material=steel)
 
 nodes_data ={0: (0.250000, 0.250000, 2.500000),
@@ -115,12 +113,10 @@ nodes = {}
 for nid, xyz in nodes_data.items():
     nodes[nid] = prt.add_node(Node(name=nid, xyz=xyz))
 
-iteration = 1
-for nodes in lines:
-    n1 = prt.find_closest_nodes_to_point(nodes_data[nodes[0]], single = True)
-    n2 = prt.find_closest_nodes_to_point(nodes_data[nodes[1]], single = True)
-    prt.add_element(TrussElement(name=str(iteration), nodes=[n1, n2], section=mainTruss))
-    iteration += 1
+for node_ids in lines:
+    n1 = nodes[node_ids[0]]
+    n2 = nodes[node_ids[1]]
+    prt.add_element(TrussElement(nodes=[n1, n2], section=mainTruss))
 
 for coords in constrained_nodes_coordinates:
     n = prt.find_closest_nodes_to_point(coords, single=True)

@@ -36,25 +36,42 @@ class OpenseesSpringElement(SpringElement):
         return f"element zeroLength {self.key} {self.nodes[0].key} {self.nodes[1].key} -mat {self.section.material.key} {self.section.material.key} -dir 1" #NOTE: adds axial stiffness
 
 class OpenseesLinkElement(LinkElement):
-    """Check the documentation \n"""
+    """
+    OpenSees implementation of :class:`compas_fea2.model.LinkElement`.\n
+
+    Additional Parameters
+    -----------------------
+    materials:
+        List input of material objects. list should contain between 1 to 6 elements. Each material's position within the list determines which direction it corresponds to
+    
+    directions:
+        List input of directions. List should be a list of numbers between 1 and 6, an input of [1 2 3 4 5 6] means all directions between two nodes are linked
+        1 = axial direction
+        2 = shear y direction
+        3 = shear z direction
+        4 = torsion x direction
+        5 = moment y direction
+        6 = moment z direction
+    
+    Note
+    ------------------------
+    Both materials and directions MUST be equal length lists. Even if only one material is used for all 6 directions, it must be repeated all 6 times.
+    """
 
     __doc__ += LinkElement.__doc__
 
-    def __init__(self, *, nodes, **kwargs):
+    def __init__(self, nodes, materials: list, directions: list, **kwargs):
         super(OpenseesLinkElement, self).__init__(nodes=nodes, **kwargs)
-        #creates list for all freedoms and materials allowing more complex linking, currently no check to equate freedoms and materials
-        _freedoms = kwargs.get("freedoms") if "freedoms" in kwargs else [1, 2, 3, 4, 5, 6]
-        self.freedoms = " ".join(str(f) for f in _freedoms)
 
-        _materials = kwargs.get("materials") if "materials" in kwargs else [self.section.material.key]*6
-        self.materials = " ".join(str(m) for m in _materials)
+        #creates list for all freedoms and materials allowing more complex linking, currently no check to equate freedoms and materials
+        self.nodes = nodes
+        self.materials = " ".join(str(mat.key) for mat in materials)
+        self.directions = " ".join(str(dir) for dir in directions)
 
     def jobdata(self):
         return "".join(
             (
-                f"element twoNodeLink {self.key} {self.nodes[0].key} {self.nodes[-1].key} "
-                f"-mat {self.materials}"
-                f"-dir {self.freedoms}"
+                f"element twoNodeLink {self.key} {self.nodes[0].key} {self.nodes[1].key} -mat {self.materials} -dir {self.directions}"
             )
         )
 
@@ -128,7 +145,6 @@ class OpenseesBeamElement(BeamElement):
         For more information about this element in OpenSees check
         `here <https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/beamWithHinges.html>`_
 
-        NOTE: needs further testing - M.S
         """
         return "element beamWithHinges {} {} {} {} {} {}".format(
             self.key,

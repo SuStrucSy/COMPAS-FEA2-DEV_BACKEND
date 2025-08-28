@@ -1,7 +1,7 @@
 from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, BeamSection, RectangularSection, PipeSection
 from compas_fea2.model.shapes import Circle
 from compas_fea2.problem import Problem, StaticStep, LoadCombination
-from compas_fea2.results import DisplacementFieldResults, ReactionFieldResults, StressFieldResults
+from compas_fea2.results import DisplacementFieldResults
 from compas_fea2_opensees import TEMP
 import compas_fea2
 import os
@@ -17,11 +17,9 @@ prt = mdl.add_part(Part(name="Beam_Frame_analysis"))
 
 prt.ndm = 3
 prt.ndf = 6
-face = Circle(radius=0.01)
 steel = ElasticIsotropic(name="Steel", E=200000000000, v=0.3, density=7850)
 
-calc = PipeSection(r=0.1, t=0.005, material=steel)
-section_beam1 = BeamSection(name="PipeSection", A=calc.A, Ixx=calc.Ixx, Iyy=calc.Iyy, Ixy=calc.Ixy, Avx=calc.Avx, Avy=calc.Avy, J=calc.J, g0=0, gw=0, material=steel, shape=face)
+section_beam1 = PipeSection(r=0.1, t=0.005, material=steel)
 
 nodes_data = \
 {   1: (0.10000000000000001, 0.0, 2.0),
@@ -258,4 +256,4 @@ stp.add_uniform_node_load(nodes=v_loaded_node, load_case="LL", x=0.0, y=0.0, z=-
 stp.add_outputs([DisplacementFieldResults])
 prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), Verbose=True)
 
-stp.show_deformed(scale_results=10, show_original=0.1, show_bcs=0.0003, show_loads=0.0001)
+stp.show_deformed(scale_results=50, show_original=0.1, show_bcs=0.0003, show_loads=0.0001)

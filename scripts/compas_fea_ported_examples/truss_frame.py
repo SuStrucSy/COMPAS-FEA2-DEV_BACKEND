@@ -19,8 +19,6 @@ prt.ndf = 3
 
 p = 7850
 A1 = 0.0008
-A2 = 0.0005
-A3 = 0.0001
 
 # Materials
 steel = ElasticIsotropic(name="Steel", E=200000000000, v=0.3, density=p)
@@ -28,8 +26,6 @@ steel = ElasticIsotropic(name="Steel", E=200000000000, v=0.3, density=p)
 # Sections
 
 mainTruss = TrussSection(name='sec_main', A=A1, material=steel)
-diagonalTruss = TrussSection(name='sec_diag', A=A2, material=steel)
-stays = TrussSection(name='sec_stays', A=A3, material=steel)
 
 nodes_data = {
     0: (0.243596, 2.624894, 5.002196),
@@ -224,12 +220,10 @@ nodes = {}
 for nid, xyz in nodes_data.items():
     nodes[nid] = prt.add_node(Node(name=nid, xyz=xyz))
 
-iteration = 1
-for nodes in lines:
-    n1 = prt.find_closest_nodes_to_point(nodes_data[nodes[0]], single = True)
-    n2 = prt.find_closest_nodes_to_point(nodes_data[nodes[1]], single = True)
-    prt.add_element(TrussElement(name=str(iteration), nodes=[n1, n2], section=mainTruss))
-    iteration += 1
+for _nodes in lines:
+    n1 = nodes[_nodes[0]]
+    n2 = nodes[_nodes[1]]
+    prt.add_element(TrussElement(nodes=[n1, n2], section=mainTruss))
 
 for coords in constrained_nodes_coordinates:
     n = prt.find_closest_nodes_to_point(coords, single=True)

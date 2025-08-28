@@ -1,5 +1,4 @@
 from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, BeamSection, RectangularSection, PipeSection
-from compas_fea2.model.shapes import Rectangle, Circle
 from compas_fea2.problem import Problem, StaticStep, LoadCombination
 from compas_fea2.results import DisplacementFieldResults, ReactionFieldResults, StressFieldResults
 from compas_fea2_opensees import TEMP
@@ -11,18 +10,15 @@ Author(s): Andrew Liew (github.com/andrewliew), Moosa Saboor (https://github.com
 Originally written/conceptualized for compas_fea by Andrew Liew, re-written completely for compas_fea2 by Moosa Saboor
 '''
 
-
 compas_fea2.set_backend("compas_fea2_opensees")
 mdl = Model(name="Beam_bathe")
 prt = mdl.add_part(Part(name="Beam_bathe_analysis"))
 
 prt.ndm = 3
 prt.ndf = 6
-face = Rectangle(w=1.0 ,h=1.0)
 steel = ElasticIsotropic(name="Steel", E=100000000, v=0.3, density=7850)
 
-calc = RectangularSection(w=1, h=1, material=steel)
-section_beam1 = BeamSection(name="RectangularSection", A=calc.A, Ixx=calc.Ixx, Iyy=calc.Iyy, Ixy=calc.Ixy, Avx=calc.Avx, Avy=calc.Avy, J=calc.J, g0=0, gw=0, material=steel, shape=face)
+section_beam1 = RectangularSection(w=1, h=1, material=steel)
 
 nodes_data = {0: (70.710678, -29.289322, 0.000000),
   1: (0.000000, 0.000000, 0.000000),
@@ -48,9 +44,9 @@ nodes = {}
 for nid, xyz in nodes_data.items():
     nodes[nid] = prt.add_node(Node(name=nid, xyz=xyz))
 
-for nodes in elements_data:
-    n1 = prt.find_closest_nodes_to_point(nodes_data[nodes[0]], single = True)
-    n2 = prt.find_closest_nodes_to_point(nodes_data[nodes[1]], single = True)
+for nodes_ids in elements_data:
+    n1 = nodes[nodes_ids[0]]
+    n2 = nodes[nodes_ids[1]]
     prt.add_element(BeamElement(nodes=[n1, n2], section=section_beam1, frame=[1,1,1]))
 
 support_node = prt.find_closest_nodes_to_point((0.0, 0.0, 0.0), single=True)
