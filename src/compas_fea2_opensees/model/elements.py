@@ -63,7 +63,6 @@ class OpenseesLinkElement(LinkElement):
     def __init__(self, nodes, materials: list, directions: list, **kwargs):
         super(OpenseesLinkElement, self).__init__(nodes=nodes, **kwargs)
 
-        #creates list for all freedoms and materials allowing more complex linking, currently no check to equate freedoms and materials
         self.nodes = nodes
         self.materials = " ".join(str(mat.key) for mat in materials)
         self.directions = " ".join(str(dir) for dir in directions)

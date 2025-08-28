@@ -104,7 +104,10 @@ class OpenseesAngleSection(AngleSection):
 
     def __init__(self, w, h, t, material, **kwargs):
         super(OpenseesAngleSection, self).__init__(w, h, t, material, **kwargs)
-        self.shape = LShape
+        self.w = w
+        self.h = h
+        self.t = t
+        self.shape = LShape(a = self.w, b = self.h, t1 = self.t, t2 = self.t)
         OpenseesBeamSection(name=self.name, A=self.A, Ixx=self.Ixx, Iyy=self.Iyy, Ixy=self.Ixy, Avx=self.Avx, Avy=self.Avy, J=self.J, g0=0, gw=0, material=material, shape=self.shape)
 
 
