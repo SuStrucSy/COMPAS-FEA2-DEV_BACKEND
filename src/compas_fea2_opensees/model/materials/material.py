@@ -15,15 +15,16 @@ class OpenseesElasticOrthotropic(ElasticOrthotropic):
 
     __doc__ += ElasticOrthotropic.__doc__
     __doc__ += """
-    Warning
-    -------
-    Currently not available in Opensees.
+    
+    OpenSees implementation of :class:`compas_fea2.model.materials.ElasticIsotropic`.\n
 
     """
 
     def __init__(self, *, Ex, Ey, Ez, vxy, vyz, vzx, Gxy, Gyz, Gzx, density, **kwargs):
         super(ElasticOrthotropic, self).__init__(Ex=Ex, Ey=Ey, Ez=Ez, vxy=vxy, vyz=vyz, vzx=vzx, Gxy=Gxy, Gyz=Gyz, Gzx=Gzx, density=density, **kwargs)
-        raise NotImplementedError
+    
+    def jobdata(self):
+        return f"nDMaterial ElasticOrthotropic {self.key} {self.Ex} {self.Ey} {self.Ez} {self.vxy} {self.vyz} {self.vzx} {self.Gxy} {self.Gyz} {self.Gzx} {self.density}\n"
 
 
 class OpenseesElasticIsotropic(ElasticIsotropic):

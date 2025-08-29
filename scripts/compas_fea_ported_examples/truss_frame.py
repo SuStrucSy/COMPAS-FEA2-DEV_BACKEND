@@ -24,7 +24,6 @@ A1 = 0.0008
 steel = ElasticIsotropic(name="Steel", E=200000000000, v=0.3, density=p)
 
 # Sections
-
 mainTruss = TrussSection(name='sec_main', A=A1, material=steel)
 
 nodes_data = {

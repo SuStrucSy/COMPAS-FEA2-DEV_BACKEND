@@ -10,7 +10,7 @@ compas_fea2.set_backend("compas_fea2_opensees")
 
 mdl = Model(name="TrussModel")
 prt = mdl.add_part(Part(name="Truss-1"))
-prt.ndm = 3
+prt.ndm = 2
 prt.ndf = 3
 
 #Materials
@@ -66,4 +66,3 @@ stp.add_outputs([DisplacementFieldResults])
 prb.analyse_and_extract(problems=[prb], path=os.path.join(TEMP, prb.name), Verbose=True)
 
 stp.show_deformed(scale_results=10, show_original=0.1, show_bcs=0.01)
-
