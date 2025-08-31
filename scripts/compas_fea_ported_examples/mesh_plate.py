@@ -3,7 +3,7 @@ from compas.datastructures import Mesh
 
 import compas_fea2
 from compas_fea2.model import Model, Part
-from compas_fea2.model import ElasticIsotropic, ShellSection
+from compas_fea2.model import ElasticIsotropic, ElasticOrthotropic, ShellSection
 from compas_fea2.problem import LoadCombination
 from compas_fea2.results import DisplacementFieldResults
 from compas_fea2_opensees import TEMP
@@ -31,8 +31,11 @@ thk = 0.02
 # ==============================================================================
 # Initialize the model
 mdl = Model(name="mesh_plate")
+
 mat = ElasticIsotropic(name='mat_elastic', E=75*10**9, v=0.3, density=2700)
-sec = ShellSection(t=thk, material=mat)
+wood = ElasticOrthotropic(name="Wood", Ex=12500000000, Ey=850000000, Ez=600000000, vxy=0.03, vzx=0.38, vyz=0.35, Gxy=950000000, Gzx=75000000, Gyz=620000000, density=460)
+
+sec = ShellSection(t=thk, material=wood)
 
 # Create a deformable part from the mesh
 prt = Part.shell_from_compas_mesh(mesh=plate, section=sec, name="shell")

@@ -84,9 +84,9 @@ class OpenseesBeamElement(BeamElement):
     __doc__ += BeamElement.__doc__
 
     def __init__(self, nodes, section, implementation="elasticBeamColumn", frame=[0.0, 0.0, -1.0], **kwargs):
+        super(OpenseesBeamElement, self).__init__(nodes=nodes, section=section, frame=frame, implementation=implementation, **kwargs)
         if not implementation:
             implementation = "elasticBeamColumn"
-        super(OpenseesBeamElement, self).__init__(nodes=nodes, section=section, frame=frame, implementation=implementation, **kwargs)
 
         try:
             self._job_data = getattr(self, "_" + implementation)
@@ -137,6 +137,21 @@ class OpenseesBeamElement(BeamElement):
                 self.section.Iyy,
                 self.key,
             )
+    def _forceBeamColumn(self):
+        """Construct a forceBeamColumn element object.
+
+        For more information about this element in OpenSees check
+        `here <https://opensees.github.io/OpenSeesDocumentation/user/manual/model/elements/forceBeamColumn.html>`_
+        """
+        return "element forceBeamColumn {} {} {} {} {}".format(
+                self.key,
+                " ".join(str(node.key) for node in self.nodes),
+                5, #numIntgrPts
+                self.section.key,
+                self.key,
+        )
+        
+
         
     def _beamWithHinges(self):
         """Construct a beamWithHinges element object.

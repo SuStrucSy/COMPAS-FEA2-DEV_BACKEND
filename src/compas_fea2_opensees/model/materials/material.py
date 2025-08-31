@@ -22,6 +22,18 @@ class OpenseesElasticOrthotropic(ElasticOrthotropic):
 
     def __init__(self, *, Ex, Ey, Ez, vxy, vyz, vzx, Gxy, Gyz, Gzx, density, **kwargs):
         super(ElasticOrthotropic, self).__init__(Ex=Ex, Ey=Ey, Ez=Ez, vxy=vxy, vyz=vyz, vzx=vzx, Gxy=Gxy, Gyz=Gyz, Gzx=Gzx, density=density, **kwargs)
+        self.Ex = Ex
+        self.Ey = Ey
+        self.Ez = Ez
+        self.vxy = vxy
+        self.vyz = vyz
+        self.vzx = vzx
+        self.Gxy = Gxy
+        self.Gyz = Gyz
+        self.Gzx = Gzx
+        self.density = density
+
+        self.type = "ElasticOrthotropic"
     
     def jobdata(self):
         return f"nDMaterial ElasticOrthotropic {self.key} {self.Ex} {self.Ey} {self.Ez} {self.vxy} {self.vyz} {self.vzx} {self.Gxy} {self.Gyz} {self.Gzx} {self.density}\n"
@@ -35,6 +47,7 @@ class OpenseesElasticIsotropic(ElasticIsotropic):
     def __init__(self, E, v, density, notension=False, **kwargs):
         super(OpenseesElasticIsotropic, self).__init__(E=E, v=v, density=density, **kwargs)
         self.notension = notension
+        self.type = "ElasticIsotropic"
 
     def jobdata(self):
         if not self.notension:

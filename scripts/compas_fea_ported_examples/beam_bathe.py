@@ -1,4 +1,4 @@
-from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, BeamSection, RectangularSection, PipeSection
+from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, ElasticOrthotropic, BeamSection, RectangularSection, PipeSection
 from compas_fea2.problem import Problem, StaticStep, LoadCombination
 from compas_fea2.results import DisplacementFieldResults, ReactionFieldResults, StressFieldResults
 from compas_fea2_opensees import TEMP

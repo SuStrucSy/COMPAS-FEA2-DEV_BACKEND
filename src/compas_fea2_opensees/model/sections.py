@@ -287,7 +287,11 @@ class OpenseesShellSection(ShellSection):
         super(OpenseesShellSection, self).__init__(t, material, **kwargs)
 
     def jobdata(self):
-        return "section ElasticMembranePlateSection {} {} {} {} {}".format(self.key, self.material.E, self.material.v, self.t, self.material.density)
+        if self.material.type == "ElasticIsotropic":
+            return "section ElasticMembranePlateSection {} {} {} {} {}".format(self.key, self.material.E, self.material.v, self.t, self.material.density)
+        
+        elif self.material.type == "ElasticOrthotropic":
+            return "section PlateFiber {} {} {}".format(self.key, self.material.key, self.t)
 
 
 class OpenseesMembraneSection(MembraneSection):
