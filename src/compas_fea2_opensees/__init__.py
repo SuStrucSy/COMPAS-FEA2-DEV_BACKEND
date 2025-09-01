@@ -88,6 +88,9 @@ from compas_fea2.model.materials.material import (
     ElasticPlastic,
     Stiff,
     UserMaterial,
+    ElasticMultiLinear,
+    MultiLinear,
+    Pinching4,
 )
 from compas_fea2.model.materials.concrete import (
     Concrete,
@@ -265,6 +268,9 @@ try:
         OpenseesElasticPlastic,
         OpenseesStiff,
         OpenseesUserMaterial,
+        OpenseesElasticMultiLinear,
+        OpenseesMultiLinear,
+        OpenseesPinching4,
     )
     from .model.materials.concrete import (
         OpenseesConcrete,
@@ -428,6 +434,9 @@ try:
         backend[ElasticIsotropic] = OpenseesElasticIsotropic
         backend[ElasticOrthotropic] = OpenseesElasticOrthotropic
         backend[ElasticPlastic] = OpenseesElasticPlastic
+        backend[ElasticMultiLinear] = OpenseesElasticMultiLinear
+        backend[MultiLinear] = OpenseesMultiLinear
+        backend[Pinching4] = OpenseesPinching4
         backend[Stiff] = OpenseesStiff
         backend[UserMaterial] = OpenseesUserMaterial
         backend[Concrete] = OpenseesConcrete

@@ -2,6 +2,7 @@ from compas_fea2.model import Model, Part, Node, BeamElement, ElasticIsotropic, 
 from compas_fea2.problem import Problem, StaticStep, LoadCombination
 from compas_fea2.results import DisplacementFieldResults, ReactionFieldResults, StressFieldResults
 from compas_fea2_opensees import TEMP
+import rhino3dm
 import compas_fea2
 import os
 
